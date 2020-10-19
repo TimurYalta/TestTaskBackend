@@ -39,13 +39,12 @@ async function createDevice(req, res) {
     }
     try {
         const body = {...req.body};
-        const id = uuid();
         const isDeviceUnique = await DeviceModel.getDeviceByName(body.name);
         if (isDeviceUnique && isDeviceUnique.length != 0) {
             return ResponseError(res, {message: "Device with such name exists"}, 400);
         }
         body.id = uuid();
-        const creationResults = await DeviceModel.createDevice(body);
+        await DeviceModel.createDevice(body);
         const now = moment().format('YYYY-MM-DD HH:mm:ss')
         const status = {
             id: body.id,
@@ -54,7 +53,7 @@ async function createDevice(req, res) {
             status: "active",
             last_sync_date: now
         };
-        const stateCreationResults = await StateModel.setDeviceState(status);
+        await StateModel.setDeviceState(status);
         return ResponseSuccess(res, {message: "Device entry successfully created"}, 200);
     } catch (error) {
         console.log(error)

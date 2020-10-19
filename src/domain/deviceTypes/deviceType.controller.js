@@ -40,7 +40,7 @@ async function createType(req, res) {
         if (isTypeUnique && isTypeUnique.length != 0) {
             return ResponseError(res, {message: "Type with such alias exists"}, 400);
         }
-        const creationResults = await DeviceTypeModel.createType(body);
+        await DeviceTypeModel.createType(body);
         return ResponseSuccess(res, {message: "Device type entry successfully created"}, 200);
     } catch (error) {
         console.log(error)

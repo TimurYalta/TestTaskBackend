@@ -21,12 +21,12 @@ const sendCommand = async (req, res) => {
     const id = req.params.id;
     try {
         const status = await sendCommandToDevice(id, body.command);
-        const dbReq = await CommandModel.addCommandToHistory({
+        await CommandModel.addCommandToHistory({
             id,
             command: body.command,
             date: status.last_sync_date
         });
-        const statusDBReq = await StateModel.setDeviceState(status);
+        await StateModel.setDeviceState(status);
         return ResponseSuccess(res, status, 200);
     } catch (error) {
         console.log(error);
